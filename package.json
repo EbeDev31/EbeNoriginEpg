@@ -3,16 +3,21 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start:mock-api": "./node_modules/.bin/osprey-mock-service -f ./node_modules/nm-mock-api/demo.raml -p 1337 --cors",
+    "start": "node ./node_modules/nm-mock-api/scripts/updateEpg.js && npm run start:mock-api",
     "test": "jest"
   },
   "dependencies": {
     "react": "16.6.1",
-    "react-native": "0.57.7"
+    "react-native": "0.57.7",
+    "react-native-gesture-handler": "^1.0.10",
+    "react-navigation": "^3.0.7",
+    "nm-mock-api": "git+https://github.com/NoriginMedia/mock-api.git#cloudberry"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
     "jest": "23.6.0",
+    "jest-haste-map": "23.6.0",
     "metro-react-native-babel-preset": "0.50.0",
     "react-test-renderer": "16.6.1"
   },
