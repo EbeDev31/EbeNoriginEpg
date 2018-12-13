@@ -23,6 +23,7 @@ import {View,Text, Button,FlatList,TextInput,TouchableOpacity,StyleSheet,} from 
 //Local Imports from App directory
 import Days from './HomePage/daysitem';
 import DayTime from './HomePage/timeDay';
+import DaySchedule from './HomePage/DaySchedule';
 
 // Personal Data for simulation
 import { daydd } from './HomePage/jsonData';
@@ -34,16 +35,16 @@ export default class Home extends Component {
     super(props);
 
     this.state = {
-      
-              newData:[],
+
+               allChannels : [],
             };
      }
 
 
- componentDidMount() {
+/* componentDidMount() {
     this.getChannels();
   }
-
+*/
 
 /**
  * This fucnctoin is in charge of Fetching 
@@ -68,80 +69,49 @@ export default class Home extends Component {
 
 
 /**
- * This fucnctoin is in charge of putting 
- * together the schedule of a given channel 
+ * This fucnctoin is in charge of Fetching 
+ * the channels Api 
  *
  */
- channelShedule = (schedules) => {
-    //let schedule=this.state.ebeProg[index];
-    console.log("Eff Geenesis");
-    console.log(schedules);
-    let flatGen = schedules.map((progObject,i) => {
-      return (
-        <View style={styles.programs}>
-          <FlatList
-            //style={styles.listitems}
-            key={i}
-            horizontal={true}
-            data={progObject}
-            keyExtractor={(item, index) => index.id}
-            renderItem={({ item, index }) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('paddy')}
-                  style={styles.listitems}>
-                  <Text>{item.title}</Text>
-                  <Text>{item.start}</Text>
-                </TouchableOpacity>
-              );
-            }}
-          />
-        </View>
-      );
+ getChannels=()=> {
+
+   fetch("http://192.168.68.105:1337/epg")
+    .then((response) => response.json())
+    .then((responseJson) => {
+      //console.log(responseJson.channels);
+       this.setState({
+                   allChannels : responseJson.channels
+                  });
+        
+    })
+    .catch((error) => {
+      console.error(error);
     });
+}
 
-    return flatGen;
-  };
- 
-  render() {
+  render(){
     
-    return (
-      <View style={styles.mainform}>
+                   // <DaySchedule channels={this.state.allChannels}/>
+      return(
 
-        <View style={styles.days}>
-          <Days />
-        </View>
+              <View style={styles.mainform}>
 
-        <View style={styles.timeOfDay}>
-          <DayTime />
-        </View>
+                  <View style={styles.days}>
+                    <Days/>
+                  </View>
 
-        <View style={styles.dayProgram}>
-          <View style={styles.programs}>
-            <FlatList
-              //style={styles.listitems}
-              // horizontal={true}
-              data={this.state.newData}
-              keyExtractor={(item, index) => index.id}
-              renderItem={({ item, index }) => {
-                return (
-                    <View
-                        style={{ backgroundColor: 'pink', flexDirection: 'row' }}>
-                          <TouchableOpacity style={styles.channel}>
-                            <Text>{item.title}</Text>
-                          </TouchableOpacity>
-                           <View style={styles.dayProgram}>
-                              {this.channelShedule(item.schedules)}
-                           </View>
-                    </View>
-                );
-              }}
-            />
-          </View>
-        </View>
-      </View>
-    );
-  }
+                  <View style={styles.timeOfDay}>
+                      <DayTime/>
+                  </View>
+
+                  <View style={styles.dayProgram}>
+                    <DaySchedule/>
+
+                  </View>
+  
+            </View>
+        );
+      }
 }
 
 const styles = StyleSheet.create({

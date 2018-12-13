@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {View,Text, Button,FlatList,TextInput,TouchableOpacity,StyleSheet,} from 'react-native';
 
-export default class Program extends Component {
+export default class ProgramDetails extends Component {
   render() {
     return (
       <View style={styles.mainform}>
